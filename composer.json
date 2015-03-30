@@ -1,6 +1,6 @@
 {
   "name": "behinddesign/chalkboard",
-  "description": "Config reader and writer using flysystem - supports ini/xml/keypair/json/environment",
+  "description": "Config reader and writer using flysystem - supports ini / xml / keypair / json / environment",
   "type": "library",
   "keywords": [
     "laravel",
