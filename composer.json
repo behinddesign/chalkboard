@@ -1,0 +1,31 @@
+{
+  "name": "behinddesign/laravel-writable-env",
+  "description": "Drop-in replacement for Laravel's Config()",
+  "keywords": [
+    "laravel",
+    "writeable",
+    "writable",
+    "env",
+    "environment",
+    "config"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Graham Davies",
+      "email": "graham@behinddesign.co.uk"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "league/flysystem": "~1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Behinddesign\\Chalkboard\\": "src/"
+    }
+  }
+}
