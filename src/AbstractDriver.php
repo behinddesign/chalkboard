@@ -2,10 +2,10 @@
 
 abstract class AbstractDriver
 {
-    protected $variableString;
+    protected $rawString;
 
-    public function __construct($variableString)
+    public function __construct($rawString)
     {
-        $this->variableString = $variableString;
+        $this->rawString = $rawString;
     }
 }
