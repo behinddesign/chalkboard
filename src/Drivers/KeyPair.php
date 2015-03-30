@@ -8,7 +8,7 @@ class KeyPair extends AbstractDriver implements DriverInterface
 
     public function read()
     {
-        return parse_ini_string($this->variableString);
+        return parse_ini_string($this->rawString);
     }
 
     public function write()
