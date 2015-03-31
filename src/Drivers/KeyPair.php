@@ -6,12 +6,12 @@ use Behinddesign\Chalkboard\DriverInterface;
 class KeyPair extends AbstractDriver implements DriverInterface
 {
 
-    public function read()
+    public function parse()
     {
         return parse_ini_string($this->rawString);
     }
 
-    public function write()
+    public function process()
     {
         return '';
     }

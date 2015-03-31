@@ -9,6 +9,10 @@ class Repository
      * @var Filesystem
      */
     private $filesystem;
+    /**
+     * @var DriverInterface
+     */
+    private $driver;
     private $fileInfo;
     private $store;
     private $dotNotation;
@@ -19,23 +23,26 @@ class Repository
         $this->fileInfo = $fileInfo;
         $this->filesystem = $filesystem;
 
+        //Remove this and replace with changeable mechanism
+        $this->setDriver(new KeyPair());
+
         $this->read();
 
         $this->dotNotation = new DotNotation($this->store);
+    }
+
+    public function setDriver(DriverInterface $driver)
+    {
+        $this->driver = $driver;
     }
 
     private function read()
     {
         $rawString = $this->filesystem->read($this->fileInfo['path']);
 
-        $driver = new KeyPair($rawString);
+        $this->driver->setRawString($rawString);
 
-        $this->store = $driver->read();
-    }
-
-    public function write()
-    {
-        //Only write if file has changed.
+        $this->store = $this->driver->parse();
     }
 
     public function get($variable)
@@ -54,5 +61,18 @@ class Repository
         $this->dotNotation->set($ns->getSuffix(), $value);
 
         return true;
+    }
+
+    public function __destruct()
+    {
+        $this->write();
+    }
+
+    public function write()
+    {
+        //Only write if file has changed.
+        if ($this->fileChanged) {
+            //Write stuff here.
+        }
     }
 }
