@@ -7,12 +7,23 @@ abstract class AbstractDriver
     public function __construct($rawString = null)
     {
         if ($rawString) {
-            $this->setRawString($rawString);
+            $this->setParseConfig($rawString);
         }
     }
 
-    public function setRawString($string)
+    /**
+     * {@inheritdoc}
+     */
+    public function setParseConfig($config)
     {
-        $this->rawString = $string;
+        $this->rawString = $config;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProcessConfig($config)
+    {
+
     }
 }

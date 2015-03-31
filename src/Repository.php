@@ -40,7 +40,7 @@ class Repository
     {
         $rawString = $this->filesystem->read($this->fileInfo['path']);
 
-        $this->driver->setRawString($rawString);
+        $this->driver->setParseConfig($rawString);
 
         $this->store = $this->driver->parse();
     }
