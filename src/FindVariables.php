@@ -21,49 +21,23 @@ class FindVariables
 
     private function findInSingleFile()
     {
-        $topLevelVariables = current($this->variableStore);
+        $removedNamespaceVariables = current($this->variableStore);
 
-        $found = $this->findDotPath($topLevelVariables);
+        $dotPath = new DotNotation($removedNamespaceVariables);
+        $found = $dotPath->get($this->variable);
         if (!$found) {
-            $found = $this->findDotPath($this->variableStore);
+            $dotPath = new DotNotation($this->variableStore);
+            $found = $dotPath->get($this->variable);
         }
 
         return $found;
     }
 
-    /**
-     * Gracefully stolen from :
-     *
-     * http://stackoverflow.com/questions/2286706/php-lookup-array-contents-with-dot-syntax/2287029#2287029
-     *
-     * @param $context
-     * @return mixed|null
-     */
-    private function findDotPath(&$context)
-    {
-        if (!strpos($this->variable, '.')) {
-            if (isset($context[$this->variable])) {
-                return $context[$this->variable];
-            } else {
-                return null;
-            }
-        }
-
-        $pieces = explode('.', $this->variable);
-        foreach ($pieces as $piece) {
-            if (!is_array($context) || !array_key_exists($piece, $context)) {
-                // error occurred
-                return null;
-            }
-            $context = &$context[$piece];
-        }
-
-        return $context;
-    }
-
     private function findInMultipleFiles()
     {
-        return $this->findDotPath($this->variableStore);
+        $dotPath = new DotNotation($this->variableStore);
+
+        return $dotPath->get($this->variable);
     }
 
     public function value()

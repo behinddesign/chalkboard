@@ -1,6 +1,7 @@
 <?php namespace Behinddesign\Chalkboard;
 
 use Behinddesign\Chalkboard\Drivers\KeyPair;
+use Behinddesign\Chalkboard\Exceptions\NamespaceNotFoundException;
 use League\Flysystem\Filesystem;
 
 class Variables
@@ -33,10 +34,10 @@ class Variables
 
     private function getFile($fileData)
     {
-        $this->files[$fileData['filename']] = array(
+        $this->files[$fileData['filename']] = [
             'path' => $fileData['basename'],
             'filename' => $fileData['filename']
-        );
+        ];
 
         return true;
     }
@@ -68,15 +69,28 @@ class Variables
         }
     }
 
-    public function find($variable)
+    public function get($variable)
     {
         $finder = new FindVariables($variable, $this->variables);
 
         return $finder->value();
     }
 
-    public function write()
+    public function set($variable, $value)
     {
+        if (count($this->variables) == 1) {
+            $namespace = key($this->variables);
+            $this->variables[$namespace] = array_merge($this->variables[$namespace], [$variable => $value]);
+        } else {
+            if (!strpos($variable, '.')) {
+                throw new NamespaceNotFoundException('Setting a variable requires a file namespace, e.g. my_file.variable');
+            }
 
+            $dotPath = new DotNotation($this->variables);
+            $dotPath->set($variable, $value);
+            $this->variables = $dotPath->getValues();
+        }
+
+        return true;
     }
 }

@@ -54,13 +54,13 @@ class Config
         $this->filesystem = new Filesystem($this->filesystemAdapter);
     }
 
-    public function write()
+    public function set($name, $variable)
     {
-
+        return $this->variables->set($name, $variable);
     }
 
     public function get($name)
     {
-        return $this->variables->find($name);
+        return $this->variables->get($name);
     }
 }
