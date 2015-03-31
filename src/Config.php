@@ -11,7 +11,6 @@ class Config
      * @var Repository[];
      */
     private $repositories;
-    private $fileData;
     private $filesystem;
     private $filesystemAdapter;
 
@@ -35,7 +34,6 @@ class Config
                 //Path is a file, lets load just this file.
                 $pathInfo = pathinfo($FileDirectoryOrAdapter);
                 $adapter = new Local($pathInfo['dirname']);
-                $this->fileData = $pathInfo;
             }
 
             $this->setAdapter($adapter);
