@@ -1,5 +1,6 @@
 <?php namespace Behinddesign\Chalkboard;
 
+use Behinddesign\Chalkboard\Exceptions\NamespaceNotFoundException;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
@@ -7,9 +8,9 @@ use League\Flysystem\Filesystem;
 class Config
 {
     /**
-     * @var Variables;
+     * @var Repository[];
      */
-    private $variables;
+    private $repositories;
     private $fileData;
     private $filesystem;
     private $filesystemAdapter;
@@ -41,7 +42,6 @@ class Config
         }
 
         $this->setFileSystem();
-        $this->variables = new Variables($this->filesystem, $this->fileData);
     }
 
     private function setAdapter(AdapterInterface $adapterInterface)
@@ -52,15 +52,45 @@ class Config
     private function setFileSystem()
     {
         $this->filesystem = new Filesystem($this->filesystemAdapter);
+
+        $contents = $this->filesystem->listContents();
+
+        foreach ($contents as $content) {
+            $this->repositories[$content['filename']] = new Repository($this->filesystem, $content);
+        }
     }
 
-    public function set($name, $variable)
+    public function set($name, $value)
     {
-        return $this->variables->set($name, $variable);
+        if (count($this->repositories) == 1) {
+            $first = current($this->repositories);
+
+            return $first->set($name, $value);
+        }
+
+        $ns = new FileNamespace($name);
+
+        if (!isset($this->repositories[$ns->getPrefix()])) {
+            throw new NamespaceNotFoundException('Cannot find the prefixed namespace used for this config->set - ' . $ns->getPrefix());
+        }
+
+        return $this->repositories[$ns->getPrefix()]->set($name, $value);
     }
 
     public function get($name)
     {
-        return $this->variables->get($name);
+        if (count($this->repositories) == 1) {
+            $first = current($this->repositories);
+
+            return $first->get($name);
+        }
+
+        $ns = new FileNamespace($name);
+
+        if (!isset($this->repositories[$ns->getPrefix()])) {
+            throw new NamespaceNotFoundException('Cannot find the prefixed namespace used for this config->get - ' . $ns->getPrefix());
+        }
+
+        return $this->repositories[$ns->getPrefix()]->get($name);
     }
 }
