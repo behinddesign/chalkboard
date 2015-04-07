@@ -1,4 +1,4 @@
-<?php namespace Behinddesign\Chalkboard;
+<?php namespace Behinddesign\Chalkboard\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
