@@ -25,7 +25,7 @@ class ChalkboardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('b', $config->get('test_2'));
     }
 
-    public function testMulitpleFileByDirectory()
+    public function testMultipleFileByDirectory()
     {
         $config = new Config($this->fixturesPath . '/multiple_config');
         $this->assertEquals('grass', $config->get('config_a.green'));
@@ -48,14 +48,22 @@ class ChalkboardTest extends PHPUnit_Framework_TestCase
         $config->get('test_write_2');
     }
 
-    public function testSingleFileMultipleDimension()
+    public function testSimpleWrite()
     {
+        $expected = 'testing=test';
+
+        $fsMock = Mockery::Mock('overload:League\Flysystem\FilesystemInterface');
+        $fsMock->shouldReceive('read')
+            ->with('single_config.ini')
+            ->andReturn($expected);
+
         $config = new Config($this->fixturesPath . '/single_config/single_config.ini');
-        $config->set('test_6.test_a.test_b', 'e');
-        $this->assertEquals('e', $config->get('test_6.test_a.test_b'));
+        var_dump($config->get('testing'));
+
+
     }
 
-    public function testWriteToSingleFileNoDotNotation()
+    /*public function testWriteToSingleFileNoDotNotation()
     {
         $config = new Config($this->fixturesPath . '/single_config/single_config.ini');
         $config->set('test_4', 'd');
@@ -63,16 +71,16 @@ class ChalkboardTest extends PHPUnit_Framework_TestCase
 
         $config->set('single_config.test_5', 'e');
         $this->assertEquals('e', $config->get('test_5'));
-    }
+    }*/
 
-    public function testWriteToSingleFileMultipleArray()
+    /*public function testWriteToSingleFileMultipleArray()
     {
         $config = new Config($this->fixturesPath . '/single_config/single_config.ini');
         $config->set('test_6.test_a.test_b', 'e');
         $this->assertEquals('e', $config->get('test_6.test_a.test_b'));
-    }
+    }*/
 
-    public function testThrowingNamespaceNotFoundDuringWrite()
+    /*public function testThrowingNamespaceNotFoundDuringWrite()
     {
         $this->setExpectedException('Behinddesign\Chalkboard\Exceptions\NamespaceNotFoundException');
 
@@ -93,5 +101,16 @@ class ChalkboardTest extends PHPUnit_Framework_TestCase
         $config = new Config($this->fixturesPath . '/multiple_config');
         $config->set('config_b.middle', 'middle written');
         $this->assertEquals('middle written', $config->get('config_b.middle'));
+    }
+
+    public function testRealConfig()
+    {
+        $config = new Config($this->fixturesPath . '/multiple_config');
+        $config->set('real_config.APP_ENV', 'lollypop');
+    }*/
+
+    public function tearDown()
+    {
+        Mockery::close();
     }
 }

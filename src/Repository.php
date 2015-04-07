@@ -1,6 +1,6 @@
 <?php namespace Behinddesign\Chalkboard;
 
-use Behinddesign\Chalkboard\Drivers\KeyPair;
+use Behinddesign\Chalkboard\Drivers\DotEnv;
 use League\Flysystem\Filesystem;
 
 class Repository
@@ -24,7 +24,7 @@ class Repository
         $this->filesystem = $filesystem;
 
         //Remove this and replace with changeable mechanism
-        $this->setDriver(new KeyPair());
+        $this->setDriver(new DotEnv());
 
         $this->read();
 
@@ -72,7 +72,14 @@ class Repository
     {
         //Only write if file has changed.
         if ($this->fileChanged) {
-            //Write stuff here.
+
+            $this->driver->setProcessConfig($this->dotNotation->getValues());
+
+            $rawString = $this->driver->process();
+
+            //var_dump($rawString);
+
+            $this->filesystem->update($this->fileInfo['path'], $rawString);
         }
     }
 }
