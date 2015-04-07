@@ -28,6 +28,8 @@
     "league/flysystem": "~1.0"
   },
   "require-dev": {
+    "illuminate/contracts": "5.0.*",
+    "illuminate/support": "5.0.*",
     "phpunit/phpunit": "~4.0",
     "mockery/mockery": "0.9.*",
     "satooshi/php-coveralls": "dev-master"

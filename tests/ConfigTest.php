@@ -48,7 +48,7 @@ class ChalkboardTest extends PHPUnit_Framework_TestCase
         $config->get('test_write_2');
     }
 
-    public function testSimpleWrite()
+    /*public function testSimpleWrite()
     {
         $expected = 'testing=test';
 
@@ -61,7 +61,7 @@ class ChalkboardTest extends PHPUnit_Framework_TestCase
         var_dump($config->get('testing'));
 
 
-    }
+    }*/
 
     /*public function testWriteToSingleFileNoDotNotation()
     {

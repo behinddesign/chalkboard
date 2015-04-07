@@ -36,7 +36,7 @@ class Repository
         $this->driver = $driver;
     }
 
-    private function read()
+    public function read()
     {
         $rawString = $this->filesystem->read($this->fileInfo['path']);
 
@@ -76,8 +76,6 @@ class Repository
             $this->driver->setProcessConfig($this->dotNotation->getValues());
 
             $rawString = $this->driver->process();
-
-            //var_dump($rawString);
 
             $this->filesystem->update($this->fileInfo['path'], $rawString);
         }
