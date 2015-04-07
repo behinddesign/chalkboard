@@ -23,7 +23,7 @@ class ChalkboardServiceProvider extends ServiceProvider
      */
     protected function registerChalkboard()
     {
-        $this->singleton('chalkboard', function () {
+        $this->app->singleton('chalkboard', function () {
             return new Config();
         });
 
